@@ -18,6 +18,7 @@ using Android.Support.Design.Widget;
 using Android.Support.V7.Widget;
 using Android.Support.V4.View;
 using IOnDismissListener = Android.Support.Design.Widget.SwipeDismissBehavior.IOnDismissListener;
+using Microsoft.Azure.Mobile.Analytics;
 
 namespace Buzzeroid
 {
@@ -47,13 +48,16 @@ namespace Buzzeroid
 		}
 
 		public override bool CanSwipeDismissView (View view)
+            
 		{
-			return view.Visibility == ViewStates.Visible && view.TranslationX == 0;
+            Analytics.TrackEvent("CanSwipeDismissView");
+            return view.Visibility == ViewStates.Visible && view.TranslationX == 0;
 		}
 
 		public override bool BlocksInteractionBelow (CoordinatorLayout parent, Java.Lang.Object child)
 		{
-			return child.JavaCast<View> ().Visibility == ViewStates.Visible;
+            Analytics.TrackEvent("BlocksInteractionBelow");
+            return child.JavaCast<View> ().Visibility == ViewStates.Visible;
 		}
 
 		public override int GetScrimColor (CoordinatorLayout parent, Java.Lang.Object child)

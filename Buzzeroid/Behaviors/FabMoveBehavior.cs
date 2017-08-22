@@ -15,6 +15,7 @@ using Android.Views.Animations;
 
 using Android.Support.Design.Widget;
 using Android.Support.V4.View.Animation;
+using Microsoft.Azure.Mobile.Crashes;
 
 namespace Buzzeroid
 {
@@ -90,7 +91,8 @@ namespace Buzzeroid
 				 * simply a vertical line.
 				 */
 				if (interpolator == null)
-					interpolator = PathInterpolatorCompat.Create (0, .47f, .47f, 1);
+                    Crashes.GenerateTestCrash();
+                interpolator = PathInterpolatorCompat.Create (0, .47f, .47f, 1);
 
 				var currentTranslation = Math.Abs (dependency.TranslationX);
 				var ratio = (minX - currentTranslation) / (float)minX;

@@ -15,7 +15,10 @@ using Android.Support.V4.Animation;
 using Android.Support.V7.App;
 using Android.Support.Design.Widget;
 using Android.Support.V7.Widget;
-
+using Microsoft.Azure.Mobile;
+using Microsoft.Azure.Mobile.Analytics;
+using Microsoft.Azure.Mobile.Crashes;
+using Microsoft.Azure.Mobile.Push;
 namespace Buzzeroid
 {
 	[Activity (Label = "Buzzeroid", MainLauncher = true, Icon = "@mipmap/icon")]
@@ -34,7 +37,33 @@ namespace Buzzeroid
 
 		protected override void OnCreate (Bundle savedInstanceState)
 		{
-			base.OnCreate (savedInstanceState);
+            // This should come before MobileCenter.Start() is called
+            Push.PushNotificationReceived += (sender, e) => {
+
+                // Add the notification message and title to the message
+                var summary = $"Push notification received:" +
+                                    $"\n\tNotification title: {e.Title}" +
+                                    $"\n\tMessage: {e.Message}";
+
+                // If there is custom data associated with the notification,
+                // print the entries
+                if (e.CustomData != null)
+                {
+                    summary += "\n\tCustom data:\n";
+                    foreach (var key in e.CustomData.Keys)
+                    {
+                        summary += $"\t\t{key} : {e.CustomData[key]}\n";
+                    }
+                }
+
+                // Send the notification summary to debug output
+                System.Diagnostics.Debug.WriteLine(summary);
+                //Toast.MakeText(summary, 2, ToastLength.Long).Show();
+            };
+            MobileCenter.SetLogUrl("https://in-staging-south-centralus.staging.avalanch.es");
+            MobileCenter.Start("1c0ed3e0-4e3d-4bb4-a41a-3680ac373f96",
+                   typeof(Analytics), typeof(Crashes),typeof(Push));
+            base.OnCreate (savedInstanceState);
 
 			SetContentView (Resource.Layout.Main);
 
@@ -103,8 +132,8 @@ namespace Buzzeroid
 						  .SetStartDelay (100)
 						  .SetInterpolator (new Android.Support.V4.View.Animation.LinearOutSlowInInterpolator ())
 						  .Start ();
-
-				return true;
+                Analytics.TrackEvent("OnOptionsItemSelected");
+                return true;
 			}
 			return base.OnOptionsItemSelected (item);
 		}
@@ -136,8 +165,8 @@ namespace Buzzeroid
 			 * test the IoT Hub part of the project, see companion
 			 * BuzzerPi app in my GitHub repository.
 			 */
-			// var api = await EnsureApi ();
-			// await api.SetBuzzerStateAsync (fab.Checked);
+			var api = await EnsureApi ();
+			await api.SetBuzzerStateAsync (fab.Checked);
 			if (!fab.Checked && openedTime.IsRunning) {
 				openedTime.Stop ();
 				AddNewBuzzEntry (wasOpened: true, duration: openedTime.Elapsed);

@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Amqp.Lite.Android</RootNamespace>
     <AssemblyName>Amqp.Lite.Android</AssemblyName>
-    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
@@ -190,10 +190,10 @@
     <AndroidResource Include="Resources\values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
-      <EmbeddedResource Include="SRAmqp.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Net\SRAmqp.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
+    <EmbeddedResource Include="SRAmqp.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Net\SRAmqp.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
